@@ -13,10 +13,24 @@
 # [Yes](https://command:python.datascience.gatherquality?yes) [No](https://command:python.datascience.gatherquality?no)
 
 # %%
+from sklearn.base import BaseEstimator, TransformerMixin
+class DropColumns(BaseEstimator, TransformerMixin):
+    def __init__(self, columns):
+        self.columns = columns
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        # Primeiro realizamos a cópia do dataframe 'X' de entrada
+        data = X.copy()
+        # Retornamos um novo dataframe sem as colunas indesejadas
+        return data.drop(labels=self.columns, axis='columns')
+
+
+# %%
 import numpy as np
-from sklearn.impute import SimpleImputer
 from sklearn.model_selection import train_test_split
-from sklearn.tree import DecisionTreeClassifier
 
 
 # %%
@@ -75,8 +89,9 @@ class DropColumns(BaseEstimator, TransformerMixin):
 
 
 # %%
+list_column_remove = ["NOME",'MATRICULA']
 rm_columns = DropColumns(
-    columns=["NOME"]  # Essa transformação recebe como parâmetro uma lista com os nomes das colunas indesejadas
+    columns=list_column_remove  # Essa transformação recebe como parâmetro uma lista com os nomes das colunas indesejadas
 )
 
 
@@ -90,6 +105,7 @@ df_data_2 = pd.DataFrame.from_records(
 
 
 # %%
+from sklearn.impute import SimpleImputer
 si = SimpleImputer(
     missing_values=np.nan,  # os valores faltantes são do tipo ``np.nan`` (padrão Pandas)
     strategy='constant',  # a estratégia escolhida é a alteração do valor faltante por uma constante
@@ -110,12 +126,9 @@ df_data_3 = pd.DataFrame.from_records(
 
 
 # %%
-features = [
-    "MATRICULA", 'REPROVACOES_DE', 'REPROVACOES_EM', "REPROVACOES_MF", "REPROVACOES_GO",
-    "NOTA_DE", "NOTA_EM", "NOTA_MF", "NOTA_GO",
-    "INGLES", "H_AULA_PRES", "TAREFAS_ONLINE", "FALTAS",
-]
 target = ["PERFIL"]
+list_column_remove.append(target[0])
+features = [i for i in df_data_3.columns if i not in list_column_remove ]
 X = df_data_3[features]
 y = df_data_3[target]
 
@@ -125,7 +138,8 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_
 
 
 # %%
-classifier_model = DecisionTreeClassifier()  # O modelo será criado com os parâmetros padrões da biblioteca
+from sklearn.tree import DecisionTreeClassifier
+classifier_model = DecisionTreeClassifier()
 
 
 # %%
@@ -164,8 +178,9 @@ if not os.path.exists(f'{path}/{file_name}.json'):
         file.write("{}")
 with open(f"{path}/{file_name}.json","r+") as file:
     data = json.load(file)
-    data[f'{acc_value}'] = {}
-    data[f'{acc_value}'].update(dictionary)
+    key = f'{method} - {acc_value}'
+    data[key] = {}
+    data[key].update(dictionary)
     file.seek(0)
     json.dump(data, file)
 
