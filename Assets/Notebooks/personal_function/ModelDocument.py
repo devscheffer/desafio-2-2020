@@ -1,4 +1,4 @@
-class Model_Document():
+class Model_Document:
     def __init__(self):
         self.dict_doc = {}
 
