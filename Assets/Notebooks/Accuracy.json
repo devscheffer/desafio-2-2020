@@ -1,8 +1,1 @@
-{
-    "IBM Solution Base - 72.0": {
-        "Accuracy": "72.0",
-        "Method": "IBM Solution Base",
-        "Classifier": "Decision Tree",
-        "Description": "Solucao feita a partir do video do behind the code\n"
-    }
-}
+{"[73.0]": {"model": [73.0], "accuracy": [73.0], "method": ["IBM Solution Base"], "classifier": ["Decision Tree"], "description": ["Solucao feita a partir do video do behind the code\n"]}}
