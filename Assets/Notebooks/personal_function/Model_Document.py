@@ -1,4 +1,4 @@
-class Model_Document:
+class cls_Model_Document:
     def __init__(self):
         self.dict_doc = {}
 
@@ -23,6 +23,4 @@ class Model_Document:
     def doc_add_accuracy(self,text):
         self.dict_doc['accuracy'].append(text)
 
-class oi():
-    print('oi')
 

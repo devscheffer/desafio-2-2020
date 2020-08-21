@@ -1,3 +1,9 @@
+import pandas as pd
+'''
+class cls_Convert:
+    def __init__(df):
+        df = df
+'''
 # Mudar variavel categorica para numerica
 def convert_cat_to_num(df,df_key):
     df[df_key] = pd.factorize(df[df_key],sort=True)[0] + 1
